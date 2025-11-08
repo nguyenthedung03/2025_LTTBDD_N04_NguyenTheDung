@@ -67,7 +67,27 @@ class CarDetailPage extends StatelessWidget {
         ],
       ),
       backgroundColor: Colors.deepPurple,
-      body: LayoutStarts(),
+      body: Column(
+        children: [
+          // large banner image for the current car
+          Consumer<StateProvider>(
+              builder: (context, state, _) {
+            final car =
+                state.currentCar ?? currentCar;
+            if (car.imgList.isEmpty)
+              return SizedBox.shrink();
+            return Container(
+              width: double.infinity,
+              height: 260,
+              child: Image.asset(
+                'assets/${car.imgList[0]}',
+                fit: BoxFit.cover,
+              ),
+            );
+          }),
+          Expanded(child: LayoutStarts()),
+        ],
+      ),
     );
   }
 }
