@@ -194,8 +194,26 @@ class _HomePageState extends State<HomePage> {
                           context,
                           listen: false)
                       .setCurrentCar(car);
-                  Navigator.pushNamed(
-                      context, '/car');
+                  // Navigate to specific car detail page based on car type
+                  final name =
+                      car.carName.toLowerCase();
+                  final company = car.companyName
+                      .toLowerCase();
+                  if (name.contains('corvette') ||
+                      company.contains(
+                          'chevrolet')) {
+                    Navigator.pushNamed(
+                        context, '/car_corvette');
+                  } else if (company.contains(
+                          'lamborghini') ||
+                      name.contains(
+                          'aventador')) {
+                    Navigator.pushNamed(
+                        context, '/car_lambo');
+                  } else {
+                    Navigator.pushNamed(
+                        context, '/car');
+                  }
                 },
                 child: Container(
                   width: 300,

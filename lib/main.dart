@@ -22,6 +22,10 @@ class MyApp extends StatelessWidget {
       home: HomePage(),
       routes: {
         '/car': (context) => CarDetailPage(),
+        '/car_corvette': (context) =>
+            CarDetailCorvettePage(),
+        '/car_lambo': (context) =>
+            CarDetailLamboPage(),
       },
     );
   }

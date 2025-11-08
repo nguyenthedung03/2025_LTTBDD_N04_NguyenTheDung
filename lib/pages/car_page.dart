@@ -59,6 +59,71 @@ class CarDetailPage extends StatelessWidget {
   }
 }
 
+/// Wrapper page that ensures the current car is set to the Corvette before
+/// showing the shared CarDetailPage UI.
+class CarDetailCorvettePage
+    extends StatefulWidget {
+  @override
+  _CarDetailCorvettePageState createState() =>
+      _CarDetailCorvettePageState();
+}
+
+class _CarDetailCorvettePageState
+    extends State<CarDetailCorvettePage> {
+  @override
+  void initState() {
+    super.initState();
+    // set the current car to the corvette
+    final corv = carList.cars.firstWhere((c) => c
+        .carName
+        .toLowerCase()
+        .contains('corvette'));
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) {
+      Provider.of<StateProvider>(context,
+              listen: false)
+          .setCurrentCar(corv);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) =>
+      CarDetailPage();
+}
+
+/// Wrapper page that ensures the current car is set to the Lamborghini before
+/// showing the shared CarDetailPage UI.
+class CarDetailLamboPage extends StatefulWidget {
+  @override
+  _CarDetailLamboPageState createState() =>
+      _CarDetailLamboPageState();
+}
+
+class _CarDetailLamboPageState
+    extends State<CarDetailLamboPage> {
+  @override
+  void initState() {
+    super.initState();
+    final lambo = carList.cars.firstWhere((c) =>
+        c.companyName
+            .toLowerCase()
+            .contains('lamborghini') ||
+        c.carName
+            .toLowerCase()
+            .contains('aventador'));
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) {
+      Provider.of<StateProvider>(context,
+              listen: false)
+          .setCurrentCar(lambo);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) =>
+      CarDetailPage();
+}
+
 class LayoutStarts extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
