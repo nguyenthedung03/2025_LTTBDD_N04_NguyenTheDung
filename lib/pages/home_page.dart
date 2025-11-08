@@ -38,6 +38,71 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: Drawer(
+        child: Consumer<StateProvider>(
+            builder: (context, state, _) {
+          return ListView(
+            children: [
+              UserAccountsDrawerHeader(
+                accountName: Text(state.loggedIn
+                    ? (state.userName ?? '')
+                    : 'Khách'),
+                accountEmail: Text(state.loggedIn
+                    ? (state.userEmail ?? '')
+                    : 'Chưa đăng nhập'),
+                currentAccountPicture:
+                    CircleAvatar(
+                  backgroundColor: Colors.white,
+                  child: Text(state.loggedIn
+                      ? (state.userName ?? 'U')[0]
+                          .toUpperCase()
+                      : 'G'),
+                ),
+              ),
+              ListTile(
+                leading: Icon(Icons.login),
+                title: Text('Đăng nhập'),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.pushNamed(
+                      context, '/login');
+                },
+              ),
+              ListTile(
+                leading:
+                    Icon(Icons.app_registration),
+                title: Text('Đăng ký'),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.pushNamed(
+                      context, '/register');
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.favorite),
+                title: Text('Xe đã thích'),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.pushNamed(
+                      context, '/favorites');
+                },
+              ),
+              Divider(),
+              ListTile(
+                leading: Icon(Icons.logout),
+                title: Text('Đăng xuất'),
+                onTap: () {
+                  Provider.of<StateProvider>(
+                          context,
+                          listen: false)
+                      .logout();
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          );
+        }),
+      ),
       appBar: AppBar(
         title: Text(
           'Thuê Xe',
@@ -47,20 +112,16 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
-        leading: IconButton(
-          icon: Icon(
-            Icons.menu,
-            color: Colors.pinkAccent,
-          ),
-          onPressed: () {},
-        ),
         actions: [
           IconButton(
             icon: Icon(
               Icons.person_outline,
               color: Colors.pinkAccent,
             ),
-            onPressed: () {},
+            onPressed: () {
+              // open drawer to show account actions
+              Scaffold.of(context).openDrawer();
+            },
           )
         ],
       ),

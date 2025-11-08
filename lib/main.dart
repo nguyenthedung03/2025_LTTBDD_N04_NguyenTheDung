@@ -3,6 +3,9 @@ import 'package:provider/provider.dart';
 import 'bloc/state_provider.dart';
 import 'pages/home_page.dart';
 import 'pages/car_page.dart';
+import 'pages/login_page.dart';
+import 'pages/register_page.dart';
+import 'pages/favorites_page.dart';
 
 void main() {
   runApp(
@@ -26,6 +29,10 @@ class MyApp extends StatelessWidget {
             CarDetailCorvettePage(),
         '/car_lambo': (context) =>
             CarDetailLamboPage(),
+        '/login': (context) => LoginPage(),
+        '/register': (context) => RegisterPage(),
+        '/favorites': (context) =>
+            FavoritesPage(),
       },
     );
   }
