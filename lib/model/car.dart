@@ -5,8 +5,8 @@ double iconSize = 30;
 CarList carList = CarList(cars: [
   Car(
       companyName: "Chevrolet",
-      carName: "Corvette",
-      price: 2100,
+      carName: "Corvette C8",
+      price: 15000000,
       imgList: [
         "corvette_front.png",
         "corvette_back.png",
@@ -16,80 +16,81 @@ CarList carList = CarList(cars: [
       ],
       offerDetails: [
         {
-          Icon(Icons.bluetooth, size: iconSize):
-              "Tự động"
+          Icon(Icons.settings, size: iconSize):
+              "Số tự động 8 cấp"
         },
         {
           Icon(
               Icons.airline_seat_individual_suite,
-              size: iconSize): "4 chỗ ngồi"
+              size: iconSize): "2 chỗ ngồi"
         },
         {
-          Icon(Icons.pin_drop, size: iconSize):
-              "6.4L"
+          Icon(Icons.local_gas_station,
+              size: iconSize): "Động cơ V8 6.2L"
         },
         {
-          Icon(Icons.shutter_speed,
-              size: iconSize): "5HP"
+          Icon(Icons.speed, size: iconSize):
+              "495 mã lực"
         },
         {
-          Icon(Icons.invert_colors,
-              size: iconSize): "Nhiều màu sắc"
+          Icon(Icons.palette, size: iconSize):
+              "12 màu sắc"
         },
       ],
       specifications: [
         {
-          Icon(Icons.timeline, size: iconSize): {
-            "Giá niêm yết": "₹ 40.8 - 49.2 Lakh"
+          Icon(Icons.local_gas_station,
+              size: iconSize): {
+            "Động cơ": "6.2L V8"
+          }
+        },
+        {
+          Icon(Icons.speed, size: iconSize): {
+            "Max": "312km/h"
           }
         },
         {
           Icon(Icons.power, size: iconSize): {
-            "Động cơ (tối đa)": "3996 cc"
+            "HP": "495"
           }
         },
         {
-          Icon(Icons.assignment_late,
-              size: iconSize): {"BHP": "700"}
-        },
-        {
-          Icon(Icons.account_balance_wallet,
-              size: iconSize): {
-            "Thông số khác": "14.2 kmpl"
+          Icon(Icons.sync, size: iconSize): {
+            "NM": "637"
           }
         },
         {
-          Icon(Icons.cached, size: iconSize): {
-            "Thông số khác": "14.2 kmpl"
+          Icon(Icons.timer, size: iconSize): {
+            "0-100": "2.9s"
           }
         },
       ],
       features: [
         {
           Icon(Icons.bluetooth, size: iconSize):
-              "Bluetooth"
+              "BT 5.0"
         },
         {
-          Icon(Icons.usb, size: iconSize):
-              "Cổng USB"
+          Icon(Icons.speaker, size: iconSize):
+              "Bose 14 loa"
         },
         {
-          Icon(Icons.power_settings_new,
-              size: iconSize): "Khóa không chìa"
+          Icon(Icons.security, size: iconSize):
+              "Smartkey"
         },
         {
-          Icon(Icons.android, size: iconSize):
-              "Android Auto"
+          Icon(Icons.phone_android,
+              size: iconSize): "CarPlay/Android"
         },
         {
           Icon(Icons.ac_unit, size: iconSize):
-              "AC"
+              "2 vùng A/C"
         },
       ]),
   Car(
       companyName: "Lamborghini",
-      carName: "Aventador",
-      price: 3000,
+      carName: "Aventador SVJ",
+      price: 25000000,
       imgList: [
         "lambo_front.png",
         "interior_lambo.png",
@@ -97,73 +98,158 @@ CarList carList = CarList(cars: [
       ],
       offerDetails: [
         {
-          Icon(Icons.bluetooth, size: iconSize):
-              "Automatic"
+          Icon(Icons.settings, size: iconSize):
+              "Số tự động 7 cấp ISR"
         },
         {
-          Icon(Icons.bluetooth, size: iconSize):
-              "4 chỗ ngồi"
+          Icon(
+              Icons.airline_seat_individual_suite,
+              size: iconSize): "2 chỗ ngồi"
         },
         {
-          Icon(Icons.bluetooth, size: iconSize):
-              "6.4L"
+          Icon(Icons.local_gas_station,
+              size: iconSize): "Động cơ V12 6.5L"
         },
         {
-          Icon(Icons.bluetooth, size: iconSize):
-              "5HP"
+          Icon(Icons.speed, size: iconSize):
+              "770 mã lực"
         },
         {
-          Icon(Icons.bluetooth, size: iconSize):
-              "Nhiều màu sắc"
+          Icon(Icons.palette, size: iconSize):
+              "Tùy chọn màu không giới hạn"
         },
       ],
       specifications: [
         {
-          Icon(Icons.bluetooth, size: iconSize): {
-            "Milegp(upto)": "14.2 kmpl"
+          Icon(Icons.timer, size: iconSize): {
+            "0-100 km/h": "2.8 giây"
           }
         },
         {
-          Icon(Icons.bluetooth, size: iconSize): {
-            "Engine(upto)": "3996 cc"
+          Icon(Icons.speed, size: iconSize): {
+            "Tốc độ tối đa": "350+ km/h"
           }
         },
         {
-          Icon(Icons.bluetooth, size: iconSize): {
-            "BHP": "700"
+          Icon(Icons.local_gas_station,
+              size: iconSize): {
+            "Động cơ": "V12 6.5L"
           }
         },
         {
-          Icon(Icons.bluetooth, size: iconSize): {
-            "Milegp(upto)": "14.2 kmpl"
+          Icon(Icons.power, size: iconSize): {
+            "Công suất": "770 mã lực"
           }
         },
         {
-          Icon(Icons.bluetooth, size: iconSize): {
-            "Milegp(upto)": "14.2 kmpl"
+          Icon(Icons.sync, size: iconSize): {
+            "Mô-men xoắn": "720 Nm"
           }
         },
       ],
       features: [
         {
-          Icon(Icons.bluetooth, size: iconSize):
-              "Bluetooth"
+          Icon(Icons.navigation, size: iconSize):
+              "ALA 2.0"
         },
         {
-          Icon(Icons.bluetooth, size: iconSize):
-              "Cổng USB"
+          Icon(Icons.settings_input_component,
+              size: iconSize): "Mag Ride"
         },
         {
-          Icon(Icons.bluetooth, size: iconSize):
-              "Không cần chìa khóa"
+          Icon(Icons.security, size: iconSize):
+              "Smartkey"
         },
         {
-          Icon(Icons.bluetooth, size: iconSize):
-              "Android Auto"
+          Icon(Icons.surround_sound,
+              size: iconSize): "Sensonum"
         },
         {
-          Icon(Icons.bluetooth, size: iconSize):
-              "Điều hòa"
+          Icon(Icons.ac_unit, size: iconSize):
+              "Auto A/C"
+        },
+      ]),
+  Car(
+      companyName: "Ferrari",
+      carName: "SF90 Stradale",
+      price: 30000000,
+      imgList: [
+        "ferrari_front.png",
+        "ferrari_back.png",
+        "ferrari_interior.png",
+      ],
+      offerDetails: [
+        {
+          Icon(Icons.settings, size: iconSize):
+              "Số tự động 8 cấp DCT"
+        },
+        {
+          Icon(
+              Icons.airline_seat_individual_suite,
+              size: iconSize): "2 chỗ ngồi"
+        },
+        {
+          Icon(Icons.battery_charging_full,
+              size: iconSize): "PHEV Hybrid"
+        },
+        {
+          Icon(Icons.speed, size: iconSize):
+              "1000 mã lực"
+        },
+        {
+          Icon(Icons.palette, size: iconSize):
+              "Tùy chọn màu cá nhân hóa"
+        },
+      ],
+      specifications: [
+        {
+          Icon(Icons.timer, size: iconSize): {
+            "0-100 km/h": "2.5 giây"
+          }
+        },
+        {
+          Icon(Icons.speed, size: iconSize): {
+            "Tốc độ tối đa": "340 km/h"
+          }
+        },
+        {
+          Icon(Icons.local_gas_station,
+              size: iconSize): {
+            "Động cơ": "V8 4.0L + 3 mô-tơ điện"
+          }
+        },
+        {
+          Icon(Icons.power, size: iconSize): {
+            "Công suất tổng": "1000 mã lực"
+          }
+        },
+        {
+          Icon(Icons.battery_charging_full,
+              size: iconSize): {
+            "Phạm vi điện": "25 km"
+          }
+        },
+      ],
+      features: [
+        {
+          Icon(Icons.touch_app, size: iconSize):
+              "Touch 16\""
+        },
+        {
+          Icon(Icons.battery_charging_full,
+              size: iconSize): "EV Mode"
+        },
+        {
+          Icon(Icons.security, size: iconSize):
+              "Active Safety"
+        },
+        {
+          Icon(Icons.speed, size: iconSize):
+              "Qualify Mode"
+        },
+        {
+          Icon(Icons.ac_unit, size: iconSize):
+              "2 vùng A/C"
         },
       ])
 ]);

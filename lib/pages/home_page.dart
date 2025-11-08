@@ -15,18 +15,45 @@ class _HomePageState extends State<HomePage> {
   final TextEditingController _searchController =
       TextEditingController();
   String _query = '';
+  int _selectedCategory =
+      0; // 0: Tất cả, 1: Phổ biến, 2: Mới nhất, 3: Sang trọng
 
   List<Car> get _filteredCars {
+    // First, apply category filter
+    List<Car> categoryFiltered =
+        _carsForSelected();
+
+    // Then apply search filter if needed
     if (_query.trim().isEmpty)
-      return carList.cars;
+      return categoryFiltered;
+
     final q = _query.toLowerCase();
-    return carList.cars.where((c) {
+    return categoryFiltered.where((c) {
       return c.companyName
               .toLowerCase()
               .contains(q) ||
           c.carName.toLowerCase().contains(q) ||
           c.price.toString().contains(q);
     }).toList();
+  }
+
+  List<Car> _carsForSelected() {
+    List<Car> list = List.from(carList.cars);
+    switch (_selectedCategory) {
+      case 1: // Phổ biến: sort by price desc as a proxy for popularity
+        list.sort(
+            (a, b) => b.price.compareTo(a.price));
+        return list;
+      case 2: // Mới nhất: show reversed list (assume later entries are newer)
+        return list.reversed.toList();
+      case 3: // Sang trọng: price threshold
+        return list
+            .where((c) => c.price >= 2500)
+            .toList();
+      case 0:
+      default:
+        return list;
+    }
   }
 
   @override
@@ -141,6 +168,61 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  Widget _buildCategories() {
+    final categories = [
+      'Tất cả',
+      'Phổ biến',
+      'Mới nhất',
+      'Sang trọng'
+    ];
+    return Container(
+      height: 50,
+      margin: EdgeInsets.symmetric(vertical: 8),
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: categories.length,
+        itemBuilder: (context, index) {
+          return GestureDetector(
+            onTap: () {
+              setState(() {
+                _selectedCategory = index;
+              });
+            },
+            child: Container(
+              margin: EdgeInsets.symmetric(
+                  horizontal: 8),
+              padding: EdgeInsets.symmetric(
+                  horizontal: 24, vertical: 8),
+              decoration: BoxDecoration(
+                color: index == _selectedCategory
+                    ? Colors.pinkAccent
+                    : Colors.transparent,
+                borderRadius:
+                    BorderRadius.circular(20),
+                border: Border.all(
+                  color: Colors.pinkAccent,
+                  width: 1,
+                ),
+              ),
+              child: Center(
+                child: Text(
+                  categories[index],
+                  style: TextStyle(
+                    color:
+                        index == _selectedCategory
+                            ? Colors.white
+                            : Colors.pinkAccent,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
   Widget _buildSearchBar() {
     return Container(
       margin: EdgeInsets.all(16),
@@ -179,53 +261,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildCategories() {
-    final categories = [
-      'Tất cả',
-      'Phổ biến',
-      'Mới nhất',
-      'Sang trọng'
-    ];
-    return Container(
-      height: 50,
-      margin: EdgeInsets.symmetric(vertical: 8),
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: categories.length,
-        itemBuilder: (context, index) {
-          return Container(
-            margin: EdgeInsets.symmetric(
-                horizontal: 8),
-            padding: EdgeInsets.symmetric(
-                horizontal: 24, vertical: 8),
-            decoration: BoxDecoration(
-              color: index == 0
-                  ? Colors.pinkAccent
-                  : Colors.transparent,
-              borderRadius:
-                  BorderRadius.circular(20),
-              border: Border.all(
-                color: Colors.pinkAccent,
-                width: 1,
-              ),
-            ),
-            child: Center(
-              child: Text(
-                categories[index],
-                style: TextStyle(
-                  color: index == 0
-                      ? Colors.white
-                      : Colors.pinkAccent,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          );
-        },
-      ),
-    );
-  }
-
   Widget _buildPopularCars() {
     return Column(
       crossAxisAlignment:
@@ -234,7 +269,13 @@ class _HomePageState extends State<HomePage> {
         Padding(
           padding: const EdgeInsets.all(16.0),
           child: Text(
-            'Xe phổ biến',
+            _selectedCategory == 0
+                ? 'Tất cả xe'
+                : _selectedCategory == 1
+                    ? 'Xe phổ biến'
+                    : _selectedCategory == 2
+                        ? 'Mới nhất'
+                        : 'Sang trọng',
             style: TextStyle(
               color: Colors.white,
               fontSize: 24,

@@ -12,8 +12,8 @@ class CustomBottomSheet extends StatefulWidget {
 class _CustomBottomSheetState
     extends State<CustomBottomSheet>
     with SingleTickerProviderStateMixin {
-  double sheetTop = 400;
-  double minSheetTop = 30;
+  double sheetTop = 250;
+  double minSheetTop = -20;
   late StateProvider stateBloc;
   late Animation<double> animation;
   late AnimationController controller;
@@ -54,37 +54,45 @@ class _CustomBottomSheetState
 
   @override
   Widget build(BuildContext context) {
-    return Positioned(
-      top: animation.value,
-      left: 0,
-      child: GestureDetector(
-        onTap: () {
-          controller.isCompleted
-              ? reverseAnimation()
-              : forwardAnimation();
-        },
-        onVerticalDragEnd:
-            (DragEndDetails dragEndDetails) {
-          //upward drag
-          if (dragEndDetails.primaryVelocity !=
-                  null &&
-              dragEndDetails.primaryVelocity! <
-                  0.0) {
-            forwardAnimation();
-            controller.forward();
-          } else if (dragEndDetails
-                      .primaryVelocity !=
-                  null &&
-              dragEndDetails.primaryVelocity! >
-                  0.0) {
-            //downward drag
-            reverseAnimation();
-          } else {
-            return;
-          }
-        },
-        child: SheetContainer(),
-      ),
+    return Stack(
+      children: [
+        Positioned(
+          top: animation.value,
+          left: 0,
+          child: SheetContainer(),
+        ),
+        Positioned(
+          bottom: 30,
+          left: 30,
+          child: FloatingActionButton.extended(
+            backgroundColor: Colors.deepPurple,
+            onPressed: () {
+              controller.isCompleted
+                  ? reverseAnimation()
+                  : forwardAnimation();
+            },
+            label: Text(
+              controller.isCompleted
+                  ? 'Hide Details'
+                  : 'Show Details',
+              style:
+                  TextStyle(color: Colors.white),
+            ),
+            icon: Icon(
+              controller.isCompleted
+                  ? Icons.keyboard_arrow_down
+                  : Icons.keyboard_arrow_up,
+              color: Colors.white,
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius:
+                  BorderRadius.horizontal(
+                right: Radius.circular(30),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

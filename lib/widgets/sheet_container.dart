@@ -8,40 +8,37 @@ class SheetContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     double sheetItemHeight = 110;
     return Container(
-      padding: EdgeInsets.only(top: 25),
+      padding: EdgeInsets.only(top: 15),
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.vertical(
               top: Radius.circular(40)),
-          color: Color(0xfff1f1f1)),
+          color:
+              Color(0xfff1f1f1).withOpacity(0.95),
+          boxShadow: [
+            BoxShadow(
+              color:
+                  Colors.black.withOpacity(0.1),
+              spreadRadius: 1,
+              blurRadius: 10,
+              offset: Offset(0, -3),
+            ),
+          ]),
       child: Column(
         children: <Widget>[
-          drawerHandle(),
           Expanded(
             flex: 1,
             child: ListView(
               children: <Widget>[
-                offerDetails(sheetItemHeight),
                 specifications(sheetItemHeight),
                 features(sheetItemHeight),
-                SizedBox(height: 220),
+                SizedBox(height: 50),
               ],
             ),
           )
         ],
       ),
-    );
-  }
-
-  Widget drawerHandle() {
-    return Container(
-      margin: EdgeInsets.only(bottom: 25),
-      height: 3,
-      width: 65,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15),
-          color: Color(0xffd9dbdb)),
     );
   }
 

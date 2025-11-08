@@ -1,12 +1,15 @@
 import 'package:flutter/foundation.dart';
 import 'dart:async';
 import '../model/car.dart';
+import '../model/comment.dart';
 
 class StateProvider extends ChangeNotifier {
   bool isAnimating = false;
   Car? currentCar;
   // track favorites by a simple key (company_carName)
   final Set<String> _favorites = {};
+  // comments per car key
+  final Map<String, List<Comment>> _comments = {};
   // simple user/auth state
   bool loggedIn = false;
   String? userName;
@@ -80,6 +83,22 @@ class StateProvider extends ChangeNotifier {
     } catch (e) {
       return [];
     }
+  }
+
+  // Comments API
+  void addComment(
+      Car car, String author, String text) {
+    final key = _keyFor(car);
+    final list =
+        _comments.putIfAbsent(key, () => []);
+    list.insert(
+        0, Comment(author: author, text: text));
+    notifyListeners();
+  }
+
+  List<Comment> getComments(Car car) {
+    final key = _keyFor(car);
+    return _comments[key] ?? [];
   }
 
   @override

@@ -7,8 +7,11 @@ import '../model/car.dart';
 import '../widgets/car_carousel.dart';
 import '../widgets/car_details.dart';
 import '../widgets/custom_bottom_sheet.dart';
+import '../widgets/comments_bottom_sheet.dart';
+import '../widgets/rent_form_bottom_sheet.dart';
 import '../widgets/list_item.dart';
 import '../widgets/sheet_container.dart';
+import '../widgets/comments_section.dart';
 
 var currentCar = carList.cars[0];
 final stateBloc = StateBloc();
@@ -42,6 +45,23 @@ class CarDetailPage extends StatelessWidget {
         }),
         centerTitle: true,
         actions: <Widget>[
+          // Comments button
+          IconButton(
+            icon: Icon(Icons.comment,
+                color: Colors.white),
+            onPressed: () {
+              // Show comments sheet
+              showModalBottomSheet(
+                context: context,
+                isScrollControlled: true,
+                backgroundColor:
+                    Colors.transparent,
+                builder: (context) =>
+                    CommentsBottomSheet(),
+              );
+            },
+          ),
+          // Favorite button
           Consumer<StateProvider>(
               builder: (context, state, _) {
             final car =
@@ -67,25 +87,26 @@ class CarDetailPage extends StatelessWidget {
         ],
       ),
       backgroundColor: Colors.deepPurple,
-      body: Column(
+      body: Stack(
         children: [
-          // large banner image for the current car
+          // Carousel that shows multiple images (smaller)
           Consumer<StateProvider>(
               builder: (context, state, _) {
             final car =
                 state.currentCar ?? currentCar;
             if (car.imgList.isEmpty)
               return SizedBox.shrink();
-            return Container(
-              width: double.infinity,
-              height: 260,
-              child: Image.asset(
-                'assets/${car.imgList[0]}',
-                fit: BoxFit.cover,
-              ),
-            );
+            return CarCarousel();
           }),
-          Expanded(child: LayoutStarts()),
+          // Content layer above the image
+          Column(
+            children: [
+              SizedBox(
+                  height:
+                      200), // Space for carousel to show (smaller)
+              Expanded(child: LayoutStarts()),
+            ],
+          ),
         ],
       ),
     );
@@ -173,30 +194,55 @@ class LayoutStarts extends StatelessWidget {
 class RentButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      alignment: Alignment.bottomRight,
-      child: SizedBox(
-        width: 200,
-        child: TextButton(
-          onPressed: () {},
-          style: TextButton.styleFrom(
-            backgroundColor: Colors.deepPurple,
-            padding: EdgeInsets.all(25),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(35)),
+    return StreamBuilder<bool>(
+      stream: Provider.of<StateProvider>(context)
+          .animationStatus,
+      initialData:
+          Provider.of<StateProvider>(context)
+              .isAnimating,
+      builder: (context, snapshot) {
+        if (snapshot.data == true) {
+          return SizedBox
+              .shrink(); // Hide button when sheet is expanded
+        }
+        return Container(
+          alignment: Alignment.bottomRight,
+          child: SizedBox(
+            width: 200,
+            child: TextButton(
+              onPressed: () {
+                showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  backgroundColor:
+                      Colors.transparent,
+                  builder: (context) =>
+                      RentFormBottomSheet(),
+                );
+              },
+              style: TextButton.styleFrom(
+                backgroundColor:
+                    Colors.deepPurple,
+                padding: EdgeInsets.all(25),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(35),
+                  ),
+                ),
+              ),
+              child: Text(
+                "Thuê Xe",
+                style: TextStyle(
+                  color: Colors.pinkAccent,
+                  fontSize: 18,
+                  letterSpacing: 1.4,
+                  fontFamily: "arial",
+                ),
+              ),
             ),
           ),
-          child: Text(
-            "Thuê Xe",
-            style: TextStyle(
-                color: Colors.pinkAccent,
-                fontSize: 18,
-                letterSpacing: 1.4,
-                fontFamily: "arial"),
-          ),
-        ),
-      ),
+        );
+      },
     );
   }
 }
@@ -295,8 +341,9 @@ class _CarCarouselState
   final List<Widget> child = _map<Widget>(imgList,
       (index, String assetName) {
     return Container(
-        child: Image.asset("assets/$assetName",
-            fit: BoxFit.fitWidth));
+      child: Image.asset("assets/$assetName",
+          fit: BoxFit.cover),
+    );
   }).toList();
 
   static List<T> _map<T>(
@@ -318,8 +365,15 @@ class _CarCarouselState
           CarouselSlider(
             items: child,
             options: CarouselOptions(
-              height: 250,
-              viewportFraction: 1.0,
+              height: 220,
+              viewportFraction: 0.92,
+              enlargeCenterPage: true,
+              autoPlay: true,
+              autoPlayInterval:
+                  Duration(seconds: 2),
+              autoPlayAnimationDuration:
+                  Duration(milliseconds: 800),
+              autoPlayCurve: Curves.easeInOut,
               onPageChanged: (index, reason) {
                 setState(() {
                   _current = index;
@@ -361,7 +415,8 @@ class _CustomBottomSheetState
     extends State<CustomBottomSheet>
     with SingleTickerProviderStateMixin {
   double sheetTop = 400;
-  double minSheetTop = 30;
+  // Make expanded sheet rise higher so specifications are more visible
+  double minSheetTop = 0;
 
   late Animation<double> animation;
   late AnimationController controller;
@@ -383,6 +438,14 @@ class _CustomBottomSheetState
       ..addListener(() {
         setState(() {});
       });
+    // Start with the sheet expanded by default.
+    // Set controller to completed state and update global state.
+    controller.value = 1.0;
+    try {
+      stateBloc.toggleAnimation();
+    } catch (e) {
+      // ignore if stateBloc isn't available in this scope
+    }
   }
 
   forwardAnimation() {
@@ -408,24 +471,39 @@ class _CustomBottomSheetState
               ? reverseAnimation()
               : forwardAnimation();
         },
+        onVerticalDragUpdate:
+            (DragUpdateDetails details) {
+          // allow interactive dragging: convert drag delta to controller value
+          final delta =
+              details.primaryDelta ?? 0.0;
+          final total = sheetTop - minSheetTop;
+          if (total <= 0) return;
+          // dragging up yields negative delta, so subtract
+          final fraction = -delta / total;
+          final newValue =
+              (controller.value + fraction)
+                  .clamp(0.0, 1.0);
+          controller.value = newValue;
+        },
         onVerticalDragEnd:
             (DragEndDetails dragEndDetails) {
           //upward drag
-          if (dragEndDetails.primaryVelocity !=
-                  null &&
-              dragEndDetails.primaryVelocity! <
-                  0.0) {
+          final v =
+              dragEndDetails.primaryVelocity ??
+                  0.0;
+          if (v < -300) {
+            // fast upward swipe -> expand
             forwardAnimation();
-            controller.forward();
-          } else if (dragEndDetails
-                      .primaryVelocity !=
-                  null &&
-              dragEndDetails.primaryVelocity! >
-                  0.0) {
-            //downward drag
+          } else if (v > 300) {
+            // fast downward swipe -> collapse
             reverseAnimation();
           } else {
-            return;
+            // decide based on controller position
+            if (controller.value > 0.5) {
+              forwardAnimation();
+            } else {
+              reverseAnimation();
+            }
           }
         },
         child: SheetContainer(),
@@ -455,7 +533,7 @@ class SheetContainer extends StatelessWidget {
               children: <Widget>[
                 specifications(sheetItemHeight),
                 features(sheetItemHeight),
-                SizedBox(height: 220),
+                SizedBox(height: 50),
               ],
             ),
           )
