@@ -28,6 +28,19 @@ class CarDetailPage extends StatelessWidget {
                 Navigator.of(context).pop(),
           ),
         ),
+        title: Consumer<StateProvider>(
+            builder: (context, state, _) {
+          final car =
+              state.currentCar ?? currentCar;
+          return Text(
+            '${car.companyName} - ${car.carName}',
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: 18),
+            overflow: TextOverflow.ellipsis,
+          );
+        }),
+        centerTitle: true,
         actions: <Widget>[
           Consumer<StateProvider>(
               builder: (context, state, _) {
