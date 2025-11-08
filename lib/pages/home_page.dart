@@ -5,7 +5,36 @@ import 'package:carousel_slider/carousel_slider.dart';
 import '../model/car.dart';
 import 'package:provider/provider.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
+  @override
+  _HomePageState createState() =>
+      _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  final TextEditingController _searchController =
+      TextEditingController();
+  String _query = '';
+
+  List<Car> get _filteredCars {
+    if (_query.trim().isEmpty)
+      return carList.cars;
+    final q = _query.toLowerCase();
+    return carList.cars.where((c) {
+      return c.companyName
+              .toLowerCase()
+              .contains(q) ||
+          c.carName.toLowerCase().contains(q) ||
+          c.price.toString().contains(q);
+    }).toList();
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,6 +90,9 @@ class HomePage extends StatelessWidget {
         borderRadius: BorderRadius.circular(30),
       ),
       child: TextField(
+        controller: _searchController,
+        onChanged: (v) =>
+            setState(() => _query = v),
         style: TextStyle(color: Colors.white),
         decoration: InputDecoration(
           border: InputBorder.none,
@@ -69,6 +101,18 @@ class HomePage extends StatelessWidget {
           hintText: 'Tìm kiếm xe...',
           hintStyle:
               TextStyle(color: Colors.white70),
+          suffixIcon: _query.isNotEmpty
+              ? IconButton(
+                  icon: Icon(Icons.clear,
+                      color: Colors.white70),
+                  onPressed: () {
+                    setState(() {
+                      _searchController.clear();
+                      _query = '';
+                    });
+                  },
+                )
+              : null,
         ),
       ),
     );
@@ -141,16 +185,15 @@ class HomePage extends StatelessWidget {
           height: 200,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
-            itemCount: carList.cars.length,
+            itemCount: _filteredCars.length,
             itemBuilder: (context, index) {
-              final car = carList.cars[index];
+              final car = _filteredCars[index];
               return GestureDetector(
                 onTap: () {
                   Provider.of<StateProvider>(
                           context,
                           listen: false)
-                      .setCurrentCar(
-                          carList.cars[index]);
+                      .setCurrentCar(car);
                   Navigator.pushNamed(
                       context, '/car');
                 },
