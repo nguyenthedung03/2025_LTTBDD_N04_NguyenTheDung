@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:rentcar_app/bloc/state_bloc.dart';
 import 'package:rentcar_app/bloc/state_provider.dart';
 import 'model/car.dart';
-import 'pages/home_page.dart';
 
 void main() => runApp(MyApp());
 
@@ -14,16 +13,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.deepPurple,
-        visualDensity:
-            VisualDensity.adaptivePlatformDensity,
-      ),
-      initialRoute: '/',
-      routes: {
-        '/': (context) => HomePage(),
-        '/detail': (context) => MainApp(),
-      },
+      home: MainApp(),
     );
   }
 }
