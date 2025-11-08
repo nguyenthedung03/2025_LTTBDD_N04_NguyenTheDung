@@ -20,16 +20,37 @@ class CarDetailPage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         leading: Container(
-            margin: EdgeInsets.only(left: 25),
-            child: Icon(
-              Icons.arrow_back,
-              color: Colors.pinkAccent,
-            )),
+          margin: EdgeInsets.only(left: 8),
+          child: IconButton(
+            icon: Icon(Icons.arrow_back,
+                color: Colors.pinkAccent),
+            onPressed: () =>
+                Navigator.of(context).pop(),
+          ),
+        ),
         actions: <Widget>[
-          Container(
-            margin: EdgeInsets.only(right: 25),
-            child: Icon(Icons.favorite_border),
-          )
+          Consumer<StateProvider>(
+              builder: (context, state, _) {
+            final car =
+                state.currentCar ?? currentCar;
+            final fav = state.isFavorite(car);
+            return Container(
+              margin: EdgeInsets.only(right: 8),
+              child: IconButton(
+                icon: Icon(
+                  fav
+                      ? Icons.favorite
+                      : Icons.favorite_border,
+                  color: fav
+                      ? Colors.redAccent
+                      : Colors.white,
+                ),
+                onPressed: () {
+                  state.toggleFavorite(car);
+                },
+              ),
+            );
+          })
         ],
       ),
       backgroundColor: Colors.deepPurple,
