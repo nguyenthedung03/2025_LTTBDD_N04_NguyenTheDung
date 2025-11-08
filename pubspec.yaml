@@ -24,8 +24,8 @@ flutter:
     - assets/corvette_front.png
     - assets/corvette_back.png
     - assets/corvette_front2.png
-    - assets/interior1.png
-    - assets/interior2.png
-    - assets/lambo_front.png
-    - assets/lambo_back.png
-    - assets/interior_lambo.png 
+    - assets/interior1.PNG
+    - assets/interior2.PNG
+    - assets/lambo_front.PNG
+    - assets/lambo_back.PNG
+    - assets/interior_lambo.PNG

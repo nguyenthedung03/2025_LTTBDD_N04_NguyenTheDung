@@ -11,22 +11,19 @@ class CarCarousel extends StatefulWidget {
 
 class _CarCarouselState
     extends State<CarCarousel> {
-  late List<String> imgList;
-
-  @override
-  void initState() {
-    super.initState();
-    final stateProvider =
-        Provider.of<StateProvider>(context,
-            listen: false);
-    imgList =
-        stateProvider.currentCar?.imgList ?? [];
-  }
-
   int _current = 0;
 
   @override
   Widget build(BuildContext context) {
+    final stateProvider =
+        Provider.of<StateProvider>(context);
+    final imgList =
+        stateProvider.currentCar?.imgList ?? [];
+
+    if (imgList.isEmpty) {
+      return SizedBox.shrink();
+    }
+
     return Container(
       child: Column(
         children: <Widget>[
