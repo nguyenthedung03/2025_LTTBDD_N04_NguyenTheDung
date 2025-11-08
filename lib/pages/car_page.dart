@@ -1,22 +1,32 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'pages/home_page.dart';
-import 'pages/car_page.dart';
-import 'model/car.dart';
+import '../bloc/state_bloc.dart';
+import '../bloc/state_provider.dart';
+import '../model/car.dart';
 
-void main() => runApp(MyApp());
+var currentCar = carList.cars[0];
 
-// Global state for currently selected car
-Car currentCar = carList.cars[0];
-
-class MyApp extends StatelessWidget {
+class CarDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: HomePage(),
-      routes: {
-        '/car': (context) => CarDetailPage(),
-      },
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        leading: Container(
+            margin: EdgeInsets.only(left: 25),
+            child: Icon(
+              Icons.arrow_back,
+              color: Colors.pinkAccent,
+            )),
+        actions: <Widget>[
+          Container(
+            margin: EdgeInsets.only(right: 25),
+            child: Icon(Icons.favorite_border),
+          )
+        ],
+      ),
+      backgroundColor: Colors.deepPurple,
+      body: LayoutStarts(),
     );
   }
 }
@@ -417,11 +427,10 @@ class SheetContainer extends StatelessWidget {
                   .specifications.length,
               itemBuilder: (context, index) {
                 return ListItem(
-                  sheetItemHeight:
-                      sheetItemHeight,
-                  mapVal: currentCar
-                      .specifications[index],
-                );
+                    sheetItemHeight:
+                        sheetItemHeight,
+                    mapVal: currentCar
+                        .specifications[index]);
               },
             ),
           )
@@ -454,11 +463,10 @@ class SheetContainer extends StatelessWidget {
                   currentCar.features.length,
               itemBuilder: (context, index) {
                 return ListItem(
-                  sheetItemHeight:
-                      sheetItemHeight,
-                  mapVal:
-                      currentCar.features[index],
-                );
+                    sheetItemHeight:
+                        sheetItemHeight,
+                    mapVal: currentCar
+                        .features[index]);
               },
             ),
           )
@@ -491,11 +499,10 @@ class SheetContainer extends StatelessWidget {
                   currentCar.offerDetails.length,
               itemBuilder: (context, index) {
                 return ListItem(
-                  sheetItemHeight:
-                      sheetItemHeight,
-                  mapVal: currentCar
-                      .offerDetails[index],
-                );
+                    sheetItemHeight:
+                        sheetItemHeight,
+                    mapVal: currentCar
+                        .offerDetails[index]);
               },
             ),
           )

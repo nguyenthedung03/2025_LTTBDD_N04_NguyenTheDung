@@ -143,17 +143,19 @@ class HomePage extends StatelessWidget {
             itemCount: carList.cars.length,
             itemBuilder: (context, index) {
               final car = carList.cars[index];
-              return Container(
-                width: 300,
-                margin: EdgeInsets.symmetric(
-                    horizontal: 8),
-                decoration: BoxDecoration(
-                  color: Colors.white
-                      .withOpacity(0.1),
-                  borderRadius:
-                      BorderRadius.circular(20),
-                ),
-                child: Stack(
+              return GestureDetector(
+                onTap: () {
+                  currentCar = carList.cars[index];
+                  Navigator.pushNamed(context, '/car');
+                },
+                child: Container(
+                  width: 300,
+                  margin: EdgeInsets.symmetric(horizontal: 8),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Stack(
                   children: [
                     Positioned.fill(
                       child: ClipRRect(
