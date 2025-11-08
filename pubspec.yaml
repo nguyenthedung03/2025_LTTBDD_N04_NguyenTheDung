@@ -16,11 +16,13 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: ^0.13.1
 
 flutter:
   uses-material-design: true
 
   assets:
+    - assets/icon.png
     - assets/corvette_front.png
     - assets/corvette_back.png
     - assets/corvette_front2.png
@@ -29,3 +31,8 @@ flutter:
     - assets/lambo_front.PNG
     - assets/lambo_back.PNG
     - assets/interior_lambo.PNG
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/icon.png"

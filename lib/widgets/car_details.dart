@@ -8,11 +8,59 @@ class CarDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<StateProvider>(
         builder: (context, stateProvider, child) {
+      final car = stateProvider.currentCar;
+      if (car == null) return Container();
+
+      // Hero/banner image with name overlay
+      Widget banner = Container();
+      if (car.imgList.isNotEmpty) {
+        banner = Stack(
+          children: [
+            Container(
+              width: double.infinity,
+              height: 220,
+              child: Image.asset(
+                'assets/${car.imgList[0]}',
+                fit: BoxFit.cover,
+              ),
+            ),
+            Positioned(
+              left: 16,
+              bottom: 16,
+              child: Column(
+                crossAxisAlignment:
+                    CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    car.companyName,
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight:
+                            FontWeight.w600),
+                  ),
+                  Text(
+                    car.carName,
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 26,
+                        fontWeight:
+                            FontWeight.bold),
+                  ),
+                ],
+              ),
+            )
+          ],
+        );
+      }
+
       return Container(
           child: Column(
         crossAxisAlignment:
             CrossAxisAlignment.start,
         children: <Widget>[
+          banner,
+          SizedBox(height: 12),
           Container(
             padding: EdgeInsets.only(left: 30),
             child: _carTitle(stateProvider),

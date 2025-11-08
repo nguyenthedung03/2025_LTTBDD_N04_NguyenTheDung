@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+# commit-msg hook: enforce ASCII-only commit messages (Vietnamese without diacritics)
+# Exit non-zero to reject the commit message.
+
+MSG_FILE="$1"
+if [ -z "$MSG_FILE" ]; then
+  echo "Loi: Khong tim thay file commit message" >&2
+  exit 1
+fi
+
+MSG=$(cat "$MSG_FILE")
+# trim whitespace
+trimmed=$(echo "$MSG" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
+if [ -z "$trimmed" ]; then
+  echo "Loi: Mo ta commit khong duoc de trong" >&2
+  exit 1
+fi
+
+# Check for non-ASCII characters. If any found, reject the commit.
+if echo "$MSG" | grep -P '[^\x00-\x7F]' >/dev/null 2>&1; then
+  echo "Loi: Mo ta commit phai la tieng Viet (khong dau) va chi chua ky tu ASCII." >&2
+  echo "Vui long bo dau tieng Viet (khong su dung: ắ, ế, ô, ê, đ, v.v.) va su dung chu thuong/hoa ASCII thong thuong." >&2
+  echo "Vi du hop le: feat(home): them tinh nang tim kiem" >&2
+  exit 1
+fi
+
+exit 0
