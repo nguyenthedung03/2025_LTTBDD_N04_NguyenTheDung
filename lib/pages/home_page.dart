@@ -3,6 +3,7 @@ import 'package:rentcar_app/bloc/state_bloc.dart';
 import 'package:rentcar_app/bloc/state_provider.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import '../model/car.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
   @override
@@ -145,81 +146,92 @@ class HomePage extends StatelessWidget {
               final car = carList.cars[index];
               return GestureDetector(
                 onTap: () {
-                  currentCar = carList.cars[index];
-                  Navigator.pushNamed(context, '/car');
+                  Provider.of<StateProvider>(
+                          context,
+                          listen: false)
+                      .setCurrentCar(
+                          carList.cars[index]);
+                  Navigator.pushNamed(
+                      context, '/car');
                 },
                 child: Container(
                   width: 300,
-                  margin: EdgeInsets.symmetric(horizontal: 8),
+                  margin: EdgeInsets.symmetric(
+                      horizontal: 8),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(20),
+                    color: Colors.white
+                        .withOpacity(0.1),
+                    borderRadius:
+                        BorderRadius.circular(20),
                   ),
                   child: Stack(
-                  children: [
-                    Positioned.fill(
-                      child: ClipRRect(
-                        borderRadius:
-                            BorderRadius.circular(
-                                20),
-                        child: Image.asset(
-                          'assets/${car.imgList[0]}',
-                          fit: BoxFit.cover,
+                    children: [
+                      Positioned.fill(
+                        child: ClipRRect(
+                          borderRadius:
+                              BorderRadius
+                                  .circular(20),
+                          child: Image.asset(
+                            'assets/${car.imgList[0]}',
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
-                    ),
-                    Positioned(
-                      bottom: 0,
-                      left: 0,
-                      right: 0,
-                      child: Container(
-                        padding:
-                            EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          gradient:
-                              LinearGradient(
-                            begin: Alignment
-                                .bottomCenter,
-                            end: Alignment
-                                .topCenter,
-                            colors: [
-                              Colors.black
-                                  .withOpacity(
-                                      0.8),
-                              Colors.transparent,
+                      Positioned(
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        child: Container(
+                          padding:
+                              EdgeInsets.all(16),
+                          decoration:
+                              BoxDecoration(
+                            gradient:
+                                LinearGradient(
+                              begin: Alignment
+                                  .bottomCenter,
+                              end: Alignment
+                                  .topCenter,
+                              colors: [
+                                Colors.black
+                                    .withOpacity(
+                                        0.8),
+                                Colors
+                                    .transparent,
+                              ],
+                            ),
+                          ),
+                          child: Column(
+                            crossAxisAlignment:
+                                CrossAxisAlignment
+                                    .start,
+                            children: [
+                              Text(
+                                '${car.companyName} ${car.carName}',
+                                style: TextStyle(
+                                  color: Colors
+                                      .white,
+                                  fontSize: 18,
+                                  fontWeight:
+                                      FontWeight
+                                          .bold,
+                                ),
+                              ),
+                              SizedBox(height: 4),
+                              Text(
+                                '${car.price}\$ / ngày',
+                                style: TextStyle(
+                                  color: Colors
+                                      .pinkAccent,
+                                  fontSize: 16,
+                                ),
+                              ),
                             ],
                           ),
                         ),
-                        child: Column(
-                          crossAxisAlignment:
-                              CrossAxisAlignment
-                                  .start,
-                          children: [
-                            Text(
-                              '${car.companyName} ${car.carName}',
-                              style: TextStyle(
-                                color:
-                                    Colors.white,
-                                fontSize: 18,
-                                fontWeight:
-                                    FontWeight
-                                        .bold,
-                              ),
-                            ),
-                            SizedBox(height: 4),
-                            Text(
-                              '${car.price}\$ / ngày',
-                              style: TextStyle(
-                                color: Colors
-                                    .pinkAccent,
-                                fontSize: 16,
-                              ),
-                            ),
-                          ],
-                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               );
             },

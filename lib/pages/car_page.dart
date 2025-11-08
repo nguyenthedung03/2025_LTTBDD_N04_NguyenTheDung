@@ -1,10 +1,17 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../bloc/state_bloc.dart';
 import '../bloc/state_provider.dart';
 import '../model/car.dart';
+import '../widgets/car_carousel.dart';
+import '../widgets/car_details.dart';
+import '../widgets/custom_bottom_sheet.dart';
+import '../widgets/list_item.dart';
+import '../widgets/sheet_container.dart';
 
 var currentCar = carList.cars[0];
+final stateBloc = StateBloc();
 
 class CarDetailPage extends StatelessWidget {
   @override
@@ -86,23 +93,22 @@ class _CarDetailsAnimationState
     with TickerProviderStateMixin {
   late AnimationController fadeController;
   late AnimationController scaleController;
-
   late Animation<double> fadeAnimation;
   late Animation<double> scaleAnimation;
+  late StateProvider stateBloc;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-
+    stateBloc = Provider.of<StateProvider>(
+        context,
+        listen: false);
     fadeController = AnimationController(
         duration: Duration(milliseconds: 180),
         vsync: this);
-
     scaleController = AnimationController(
         duration: Duration(milliseconds: 350),
         vsync: this);
-
     fadeAnimation = Tween(begin: 0.0, end: 1.0)
         .animate(fadeController);
     scaleAnimation = Tween(begin: 0.8, end: 1.0)
@@ -113,26 +119,37 @@ class _CarDetailsAnimationState
     ));
   }
 
-  forward() {
+  void forward() {
     scaleController.forward();
     fadeController.forward();
   }
 
-  reverse() {
+  void reverse() {
     scaleController.reverse();
     fadeController.reverse();
   }
 
   @override
+  void dispose() {
+    fadeController.dispose();
+    scaleController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return StreamBuilder<Object>(
-        initialData: StateProvider().isAnimating,
+    return StreamBuilder<bool>(
+        initialData:
+            Provider.of<StateProvider>(context)
+                .isAnimating,
         stream: stateBloc.animationStatus
-            .cast<Object>(),
+            .cast<bool>(),
         builder: (context, snapshot) {
-          (snapshot.data as bool)
-              ? forward()
-              : reverse();
+          if (snapshot.data == true) {
+            forward();
+          } else {
+            reverse();
+          }
 
           return ScaleTransition(
             scale: scaleAnimation,
@@ -142,69 +159,6 @@ class _CarDetailsAnimationState
             ),
           );
         });
-  }
-}
-
-class CarDetails extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        child: Column(
-      crossAxisAlignment:
-          CrossAxisAlignment.start,
-      children: <Widget>[
-        Container(
-          padding: EdgeInsets.only(left: 30),
-          child: _carTitle(),
-        ),
-        Container(
-          width: double.infinity,
-          child: CarCarousel(),
-        )
-      ],
-    ));
-  }
-
-  _carTitle() {
-    return Column(
-      crossAxisAlignment:
-          CrossAxisAlignment.start,
-      children: <Widget>[
-        RichText(
-          text: TextSpan(
-              style: TextStyle(
-                  color: Colors.pinkAccent,
-                  fontSize: 38),
-              children: [
-                TextSpan(
-                    text: currentCar.companyName),
-                TextSpan(text: "\n"),
-                TextSpan(
-                    text: currentCar.carName,
-                    style: TextStyle(
-                        fontWeight:
-                            FontWeight.w700)),
-              ]),
-        ),
-        SizedBox(height: 10),
-        RichText(
-          text: TextSpan(
-              style: TextStyle(fontSize: 16),
-              children: [
-                TextSpan(
-                    text: currentCar.price
-                        .toString(),
-                    style: TextStyle(
-                        color: Colors.pink[20])),
-                TextSpan(
-                  text: " / ngày",
-                  style: TextStyle(
-                      color: Colors.pink),
-                )
-              ]),
-        ),
-      ],
-    );
   }
 }
 
@@ -380,7 +334,6 @@ class SheetContainer extends StatelessWidget {
             flex: 1,
             child: ListView(
               children: <Widget>[
-                offerDetails(sheetItemHeight),
                 specifications(sheetItemHeight),
                 features(sheetItemHeight),
                 SizedBox(height: 220),
@@ -392,7 +345,7 @@ class SheetContainer extends StatelessWidget {
     );
   }
 
-  drawerHandle() {
+  Widget drawerHandle() {
     return Container(
       margin: EdgeInsets.only(bottom: 25),
       height: 3,
@@ -403,7 +356,7 @@ class SheetContainer extends StatelessWidget {
     );
   }
 
-  specifications(double sheetItemHeight) {
+  Widget specifications(double sheetItemHeight) {
     return Container(
       padding: EdgeInsets.only(top: 15, left: 40),
       child: Column(
@@ -439,7 +392,7 @@ class SheetContainer extends StatelessWidget {
     );
   }
 
-  features(double sheetItemHeight) {
+  Widget features(double sheetItemHeight) {
     return Container(
       padding: EdgeInsets.only(top: 15, left: 40),
       child: Column(
@@ -475,7 +428,7 @@ class SheetContainer extends StatelessWidget {
     );
   }
 
-  offerDetails(double sheetItemHeight) {
+  Widget offerDetails(double sheetItemHeight) {
     return Container(
       padding: EdgeInsets.only(top: 15, left: 40),
       child: Column(
@@ -516,9 +469,10 @@ class ListItem extends StatelessWidget {
   final double sheetItemHeight;
   final Map mapVal;
 
-  ListItem(
-      {required this.sheetItemHeight,
-      required this.mapVal});
+  ListItem({
+    required this.sheetItemHeight,
+    required this.mapVal,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -550,12 +504,15 @@ class ListItem extends StatelessWidget {
         children: <Widget>[
           mapVal.keys.elementAt(0),
           isMap
-              ? Text(innerMap.keys.elementAt(0),
+              ? Text(
+                  innerMap.keys.elementAt(0),
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                      color: Colors.deepPurple,
-                      letterSpacing: 1.2,
-                      fontSize: 11))
+                    color: Colors.deepPurple,
+                    letterSpacing: 1.2,
+                    fontSize: 11,
+                  ),
+                )
               : Container(),
           Text(
             innerMap.values.elementAt(0),
@@ -565,7 +522,7 @@ class ListItem extends StatelessWidget {
               fontWeight: FontWeight.w600,
               fontSize: 15,
             ),
-          )
+          ),
         ],
       ),
     );

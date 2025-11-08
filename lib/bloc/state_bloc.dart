@@ -1,20 +1,19 @@
-import 'state_provider.dart';
 import 'dart:async';
+import '../model/car.dart';
 
 class StateBloc {
-  StreamController animationController = StreamController();
-  final StateProvider provider = StateProvider();
+  Car? currentCar;
+  StreamController animationController =
+      StreamController();
 
-  Stream get animationStatus => animationController.stream;
+  Stream get animationStatus =>
+      animationController.stream;
 
   void toggleAnimation() {
-    provider.toggleAnimationValue();
-    animationController.sink.add(provider.isAnimating);
+    animationController.sink.add(true);
   }
 
   void dispose() {
     animationController.close();
   }
 }
-
-final stateBloc = StateBloc();
