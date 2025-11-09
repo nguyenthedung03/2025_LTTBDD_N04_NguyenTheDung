@@ -1,4 +1,3 @@
-# Báo cáo 
 ## Bộ môn : Lập Trình Ứng Dụng Di Động (N04)
 ## ĐỀ TÀI : Ứng dụng Cho Thuê Xe
 
