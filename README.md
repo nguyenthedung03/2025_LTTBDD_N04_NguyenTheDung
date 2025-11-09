@@ -1,11 +1,11 @@
 # Báo cáo 
-# Bộ môn : Lập Trình Ứng Dụng Di Động (N04)
-# ĐỀ TÀI : Ứng dụng Cho Thuê Xe
+## Bộ môn : Lập Trình Ứng Dụng Di Động (N04)
+## ĐỀ TÀI : Ứng dụng Cho Thuê Xe
 
-# Giảng Viên Hướng Dẫn: Nguyễn Xuân Quế
+- Giảng Viên Hướng Dẫn: Nguyễn Xuân Quế
 
-# Sinh Viên Thực Hiện : Nguyễn Thế Dũng
-# Mã Số Sinh Viên : 23010396
+- Sinh Viên Thực Hiện : Nguyễn Thế Dũng
+- Mã Số Sinh Viên : 23010396
 
 ## Phần 1 - SRS (Software Requirements Specification)
 
